@@ -1,0 +1,40 @@
+name: beautycare_project
+
+services:
+  beautycare_db:
+    # Postgres 15 es correcto para el stack 3.3.1
+    image: postgres:15-alpine
+    container_name: beautycare_db
+    ports:
+      - "${DB_CORE_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_CORE_USER}
+      POSTGRES_PASSWORD: ${DB_CORE_PASSWORD}
+      POSTGRES_DB: ${DB_CORE_NAME}
+    volumes:
+      - beautycare_data:/var/lib/postgresql/data
+    networks:
+      - beautycare_net
+
+  inventory_db:
+    # Postgres 15 es correcto para el stack 3.3.1
+    image: postgres:15-alpine
+    container_name: inventory_db
+    ports:
+      - "${DB_INV_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_INV_USER}
+      POSTGRES_PASSWORD: ${DB_INV_PASSWORD}
+      POSTGRES_DB: ${DB_INV_NAME}
+    volumes:
+      - inventory_data:/var/lib/postgresql/data
+    networks:
+      - beautycare_net
+
+volumes:
+  beautycare_data:
+  inventory_data:
+
+networks:
+  beautycare_net:
+    driver: bridge
