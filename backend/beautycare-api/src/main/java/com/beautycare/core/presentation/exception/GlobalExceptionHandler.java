@@ -42,6 +42,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Maneja validaciones de negocio (solapamiento, duplicados).
+     */
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<Map<String, Object>> handleBusinessRuleException(BusinessRuleException ex) {
+        Map<String, Object> body = Map.of(
+                "status", HttpStatus.BAD_REQUEST.value(), // 400 Bad Request
+                "error", "Business Rule Violation",
+                "message", ex.getMessage()
+        );
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * Manejador genérico para otras excepciones.
      */
     @ExceptionHandler(Exception.class)
