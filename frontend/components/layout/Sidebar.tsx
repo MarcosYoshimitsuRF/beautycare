@@ -23,7 +23,7 @@ const navLinks = [
   { href: '/profesionales', label: 'Profesionales', icon: Workflow, roles: ['ADMIN'] }, // Añadir si es necesario
   { href: '/servicios', label: 'Servicios', icon: Settings, roles: ['ADMIN'] }, // Añadir si es necesario
   { href: '/citas', label: 'Citas', icon: Calendar, roles: ['ADMIN', 'CLIENTE', 'STAFF'] },
-  // { href: '/pagos', label: 'Pagos', icon: ShoppingCart, roles: ['ADMIN', 'STAFF'] }, // Añadir si es necesario
+  { href: '/pagos', label: 'Pagos', icon: ShoppingCart, roles: ['ADMIN', 'STAFF'] }, // Añadir si es necesario
   { href: '/inventario/insumos', label: 'Insumos', icon: Package, roles: ['ADMIN'] },
   { href: '/inventario/proveedores', label: 'Proveedores', icon: Truck, roles: ['ADMIN'] },
   { href: '/inventario/compras', label: 'Compras', icon: ShoppingCart, roles: ['ADMIN'] }, // Añadir si es necesario
