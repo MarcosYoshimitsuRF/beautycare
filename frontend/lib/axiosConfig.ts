@@ -32,17 +32,20 @@ const addAuthTokenInterceptor = (axiosInstance: AxiosInstance): void => {
       let token: string | null = null;
       if (typeof window !== 'undefined') { // Solo ejecutar en el cliente
         token = localStorage.getItem('jwtToken');
+        console.log(`Interceptor: Token from localStorage for ${config.url}:`, token ? `Token found (length ${token.length})` : 'No token found');
       }
 
       if (token) {
-        // Aseguramos que config.headers exista antes de modificarlo
         config.headers = config.headers || {};
         config.headers['Authorization'] = `Bearer ${token}`;
+        console.log(`Interceptor: Added Authorization header to ${config.url}`);
+      } else {
+         console.warn(`Interceptor: No token found, request to ${config.url} will likely fail if protected.`);
       }
       return config;
     },
     (error: AxiosError): Promise<AxiosError> => {
-      // Manejo de errores en la configuración de la petición
+      console.error("Interceptor Request Error:", error);
       return Promise.reject(error);
     }
   );

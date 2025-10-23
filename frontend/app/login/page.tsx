@@ -40,6 +40,7 @@ export default function LoginPage() {
       if (response.data?.token) {
         if (typeof window !== 'undefined') {
           localStorage.setItem('jwtToken', response.data.token);
+          console.log("Token guardado en localStorage.");
           router.replace('/dashboard'); // Usar replace para no guardar login en historial
         }
       } else { setLoginError('Respuesta inesperada del servidor.'); }

@@ -37,3 +37,10 @@ services:
   inventory:
     # URL base del microservicio para WebClient
     url: "http://localhost:8081"
+
+logging:
+  level:
+    # Paquete base de tu aplicación
+    com.beautycare.core: DEBUG
+    # Nivel específico para Spring Security (útil)
+    org.springframework.security: DEBUG
