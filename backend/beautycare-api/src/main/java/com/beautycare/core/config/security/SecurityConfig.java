@@ -1,97 +1,87 @@
 package com.beautycare.core.config.security;
 
-import com.beautycare.core.domain.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.http.HttpMethod; // Importar HttpMethod
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl; // Importar AccessDeniedHandlerImpl
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity // Requerido para seguridad a nivel de método (si se usa)
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final UsuarioRepository usuarioRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Deshabilitamos CSRF (Cross-Site Request Forgery) para APIs stateless
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // Definición de reglas de autorización
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos (Login y WSDL de SOAP)
+                        // --- Rutas Públicas ---
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/soap-ws/**").permitAll()
 
-                        // Endpoints de Administración (según documentación)
+                        // --- Rutas ADMIN (CRUD completo y otras) ---
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/clientes/**").hasRole("ADMIN")
-                        .requestMatchers("/profesionales/**").hasRole("ADMIN")
-                        .requestMatchers("/servicios/**").hasRole("ADMIN")
+                        // Permitir GET a todos, restringir escritura a ADMIN
+                        .requestMatchers(HttpMethod.GET, "/clientes/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/clientes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/clientes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/clientes/**").hasRole("ADMIN")
+                        // Permitir GET a todos, restringir escritura a ADMIN (NECESARIO PARA CITAS)
+                        .requestMatchers(HttpMethod.GET, "/profesionales/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/profesionales/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/profesionales/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/profesionales/**").hasRole("ADMIN")
+                        // Permitir GET a todos, restringir escritura a ADMIN (NECESARIO PARA CITAS)
+                        .requestMatchers(HttpMethod.GET, "/servicios/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/servicios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/servicios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/servicios/**").hasRole("ADMIN")
 
-                        // Endpoints operativos (requieren autenticación)
                         .requestMatchers("/citas/**").authenticated()
                         .requestMatchers("/pagos/**").authenticated()
-                        .requestMatchers("/reportes/**").authenticated()
+                        .requestMatchers("/reportes/**").authenticated() // Podría restringirse más si es necesario
 
-                        // Cualquier otra petición debe ser autenticada
                         .anyRequest().authenticated()
                 )
-
-                // Configuración de la sesión como STATELESS (sin estado)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // Añadimos el filtro JWT antes del filtro de autenticación estándar
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                        .accessDeniedHandler(new AccessDeniedHandlerImpl())
+                );
 
         return http.build();
     }
 
-    // --- Beans requeridos por Spring Security ---
-
     @Bean
-    public UserDetailsService userDetailsService() {
-        // Implementación de UserDetailsService usando el repositorio
-        return username -> usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // Bean para BCrypt (requerido por la documentación)
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        // Proveedor de autenticación que usa UserDetailsService y PasswordEncoder
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        // Exponemos el AuthenticationManager (necesario para el endpoint de Login)
-        return config.getAuthenticationManager();
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+        configuration.setMaxAge(3600L);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
