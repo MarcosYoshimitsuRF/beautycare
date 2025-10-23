@@ -10,21 +10,23 @@ import {
   BarChart2,
   Package, // (Insumos)
   Truck,
-  Workflow, // (Proveedores)
+  Workflow,
+  Settings,
+  ShoppingCart, // (Proveedores)
 } from 'lucide-react';
 import { buttonVariants } from '../ui/button';
 
 // Define los links de navegación
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['ADMIN', 'CLIENTE', 'STAFF'] },
-  { href: '/clientes', label: 'Clientes', icon: Users, roles: ['ADMIN'] },{ href: '/profesionales', label: 'Profesionales', icon: Workflow, roles: ['ADMIN'] },
-  // { href: '/profesionales', label: 'Profesionales', icon: Users, roles: ['ADMIN'] }, // Añadir si es necesario
-  // { href: '/servicios', label: 'Servicios', icon: Settings, roles: ['ADMIN'] }, // Añadir si es necesario
+  { href: '/clientes', label: 'Clientes', icon: Users, roles: ['ADMIN'] },
+  { href: '/profesionales', label: 'Profesionales', icon: Workflow, roles: ['ADMIN'] }, // Añadir si es necesario
+  { href: '/servicios', label: 'Servicios', icon: Settings, roles: ['ADMIN'] }, // Añadir si es necesario
   { href: '/citas', label: 'Citas', icon: Calendar, roles: ['ADMIN', 'CLIENTE', 'STAFF'] },
   // { href: '/pagos', label: 'Pagos', icon: ShoppingCart, roles: ['ADMIN', 'STAFF'] }, // Añadir si es necesario
   { href: '/inventario/insumos', label: 'Insumos', icon: Package, roles: ['ADMIN'] },
   { href: '/inventario/proveedores', label: 'Proveedores', icon: Truck, roles: ['ADMIN'] },
-  // { href: '/inventario/compras', label: 'Compras', icon: ShoppingCart, roles: ['ADMIN'] }, // Añadir si es necesario
+  { href: '/inventario/compras', label: 'Compras', icon: ShoppingCart, roles: ['ADMIN'] }, // Añadir si es necesario
   { href: '/reportes', label: 'Reportes', icon: BarChart2, roles: ['ADMIN'] }, // O definir reportes específicos por rol
 ];
 
