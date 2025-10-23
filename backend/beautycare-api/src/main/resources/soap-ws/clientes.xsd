@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://beautycare.com/core/soap/ws"
+           targetNamespace="http://beautycare.com/core/soap/ws"
+           elementFormDefault="qualified">
+
+    <xs:element name="consultarEstadoClienteRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="clienteId" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="consultarEstadoClienteResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="estado" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

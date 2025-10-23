@@ -1,4 +1,4 @@
-package com.beautycare.core.presentation;
+package com.beautycare.core.presentation.controller;
 
 import com.beautycare.core.config.security.JwtService;
 import com.beautycare.core.config.security.payload.AuthRequest;

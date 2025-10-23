@@ -58,4 +58,22 @@ public class ClienteService {
         }
         clienteRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public String consultarEstadoClienteSoap(String clienteIdStr) {
+        Long id;
+        try {
+            id = Long.parseLong(clienteIdStr);
+        } catch (NumberFormatException e) {
+            return "ID_INVALIDO";
+        }
+
+        boolean existe = clienteRepository.existsById(id);
+
+        if (existe) {
+            return "ACTIVO";
+        } else {
+            return "INEXISTENTE";
+        }
+    }
 }

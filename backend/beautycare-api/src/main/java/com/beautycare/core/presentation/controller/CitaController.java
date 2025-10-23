@@ -6,6 +6,7 @@ import com.beautycare.core.presentation.dto.CitaResponseDTO;
 import com.beautycare.core.presentation.exception.BusinessRuleException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/citas") // Protegido por SecurityConfig (Autenticado)
+@RequestMapping("/citas")
 @RequiredArgsConstructor
 public class CitaController {
 
@@ -28,7 +29,6 @@ public class CitaController {
 
     @GetMapping
     public ResponseEntity<List<CitaResponseDTO>> listarCitas() {
-        // (Filtros GET no especificados, se listan todas) [fuente: 70]
         return ResponseEntity.ok(citaService.listarCitas());
     }
 
@@ -38,23 +38,24 @@ public class CitaController {
     }
 
     /**
-     * Endpoint para actualizar estado.
-     * Se usará en Fase 5 [fuente: 70, 92]
+     * Endpoint para actualizar estado [fuente: 70, 92]
+     * AHORA INCLUYE EL REENVÍO DEL TOKEN
      */
     @PutMapping("/{id}/estado")
     public ResponseEntity<CitaResponseDTO> actualizarEstado(
             @PathVariable Long id,
-            @RequestBody Map<String, String> body) {
+            @RequestBody Map<String, String> body,
+            // 1. Capturamos el encabezado Authorization (JWT)
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
+    ) {
 
         String nuevoEstado = body.get("estado");
         if (nuevoEstado == null || nuevoEstado.isBlank()) {
             throw new BusinessRuleException("El 'estado' es obligatorio en el body.");
         }
 
-        CitaResponseDTO citaActualizada = citaService.actualizarEstadoCita(id, nuevoEstado.toUpperCase());
+        // 2. Pasamos el token al servicio
+        CitaResponseDTO citaActualizada = citaService.actualizarEstadoCita(id, nuevoEstado.toUpperCase(), authHeader);
         return ResponseEntity.ok(citaActualizada);
     }
-
-    // PUT /{id} (actualización completa) no se implementa
-    // ya que el flujo principal es por estado [fuente: 70]
 }

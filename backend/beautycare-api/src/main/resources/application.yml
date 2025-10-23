@@ -1,11 +1,9 @@
 server:
-  port: 8080 # Puerto 8080 definido en la documentación
+  port: 8080
 
 # Configuración de Spring
 spring:
   # --- Configuración de Base de Datos (DataSource) ---
-  # Configuración para desarrollo local (Fase 0-7)
-  # Conexión a localhost y puertos expuestos por Docker Compose
   datasource:
     url: jdbc:postgresql://localhost:5432/beautycare_db
     username: beauty_admin
@@ -15,23 +13,27 @@ spring:
   # --- Configuración de JPA (Hibernate) ---
   jpa:
     hibernate:
-      # Flyway manejará el esquema. Hibernate solo debe validar que existe.
       ddl-auto: validate
     properties:
       hibernate:
-        # Formatea el SQL en la consola para mejor depuración
         format_sql: true
-    # Muestra el SQL generado por JPA en los logs
     show-sql: true
 
   # --- Configuración de Flyway ---
   flyway:
     enabled: true
-    # Ubicación estándar de los scripts de migración
     locations: classpath:db/migration
 
-  application:
-    security:
-      jwt:
-        # Clave secreta (Debe ser larga y segura)
-        secret-key: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+# --- Configuración de Seguridad (Fase 2) ---
+# (Este bloque probablemente faltaba o estaba mal indentado)
+application:
+  security:
+    jwt:
+      # Clave secreta (Debe ser larga y segura)
+      secret-key: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+
+# --- Configuración de servicios externos (Fase 5) ---
+services:
+  inventory:
+    # URL base del microservicio para WebClient
+    url: "http://localhost:8081"
