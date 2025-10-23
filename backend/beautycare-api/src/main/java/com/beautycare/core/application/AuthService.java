@@ -47,27 +47,26 @@ public class AuthService {
 
     @Transactional
     public UsuarioDTO register(RegisterRequest registerRequest) {
-        // 1. Validar si el username ya existe
+        //Validar si el username ya existe
         if (usuarioRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
             throw new BusinessRuleException("El nombre de usuario ya está en uso.");
-            // Considerar validar también el email si fuera un campo separado
         }
 
-        // 2. Buscar el rol CLIENTE (debe existir por V2/DataSeeder)
+        //Buscar el rol CLIENTE
         Rol rolCliente = rolRepository.findByNombre("CLIENTE")
                 .orElseThrow(() -> new BusinessRuleException("Rol CLIENTE no encontrado. Contacte al administrador."));
 
-        // 3. Crear el nuevo usuario
+        //Crear el nuevo usuario
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setUsername(registerRequest.getUsername());
         nuevoUsuario.setPassword(passwordEncoder.encode(registerRequest.getPassword())); // Encriptar password
-        nuevoUsuario.setEnabled(true); // Habilitado por defecto
+        nuevoUsuario.setEnabled(true);
         nuevoUsuario.setRoles(Set.of(rolCliente));
 
-        // 4. Guardar en la BD
+        // Guardar en la BD
         Usuario usuarioGuardado = usuarioRepository.save(nuevoUsuario);
 
-        // 5. Devolver DTO del usuario creado (sin contraseña)
+        //Devolver DTO del usuario creado (sin contraseña)
         return usuarioMapper.toDTO(usuarioGuardado);
     }
 }

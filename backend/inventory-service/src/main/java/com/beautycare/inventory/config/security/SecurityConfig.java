@@ -32,7 +32,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // **PASO 1: Habilitar CORS**
+                // Habilitar CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .csrf(AbstractHttpConfigurer::disable)
@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // **Manejo de Excepciones (Devolver 401 si falla validación JWT)**
+                //Manejo de Excepciones (Devolver 401 si falla validación JWT)
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 );
@@ -81,5 +81,4 @@ public class SecurityConfig {
         return source;
     }
 
-    // NOTA: UserDetailsService y AuthenticationManager NO son necesarios aquí.
 }

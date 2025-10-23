@@ -21,10 +21,6 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
             @Param("nuevoFin") LocalDateTime nuevoFin
     );
 
-    /**
-     * Query para reporte top servicios [fuente: 74].
-     * Agrupa por servicio y cuenta las citas (ej. PENDIENTE o REALIZADA).
-     */
     @Query("SELECT new com.beautycare.core.presentation.dto.ReporteTopServicioDTO(s.id, s.nombre, COUNT(c)) " +
             "FROM Cita c JOIN c.servicio s " +
             "WHERE c.fechaHoraInicio BETWEEN :desde AND :hasta " +

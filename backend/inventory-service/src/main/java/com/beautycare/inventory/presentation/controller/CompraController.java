@@ -24,11 +24,8 @@ public class CompraController {
 
     @PostMapping
     public ResponseEntity<CompraDTO> registrarCompra(@Valid @RequestBody CompraDTO compraDTO) {
-        // Este método cumple el requisito de "registra compra y repone stock" [fuente: 82]
         CompraDTO compraRegistrada = compraService.registrarCompraYReponerStock(compraDTO);
         return new ResponseEntity<>(compraRegistrada, HttpStatus.CREATED);
     }
 
-    // NOTA: Los endpoints PUT y DELETE para 'Compra' no están especificados
-    // en los requisitos de la Fase 3, por lo que solo se implementa GET y POST.
 }

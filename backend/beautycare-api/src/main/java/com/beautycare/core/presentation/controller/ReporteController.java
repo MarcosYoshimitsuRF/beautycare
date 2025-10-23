@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reportes") // Protegido por SecurityConfig (Autenticado)
+@RequestMapping("/reportes")
 @RequiredArgsConstructor
 public class ReporteController {
 

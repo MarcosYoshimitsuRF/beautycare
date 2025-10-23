@@ -5,9 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.time.LocalDateTime;
 
-/**
- * DTO para crear una Cita (POST)
- */
+
 @Data
 public class CitaRequestDTO {
 
@@ -24,5 +22,4 @@ public class CitaRequestDTO {
     @Future(message = "La cita debe ser en una fecha futura")
     private LocalDateTime fechaHoraInicio;
 
-    // La fechaHoraFin y el estado se calculan/asignan en el servicio.
 }

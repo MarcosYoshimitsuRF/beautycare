@@ -22,14 +22,13 @@ public class ConsumoService {
     private final InsumoRepository insumoRepository;
 
     /**
-     * Lógica de negocio para descontar stock [fuente: 131].
-     * Busca las reglas de consumo para un servicio y descuenta
+     * Buscamos las reglas de consumo para un servicio y descuenta
      * el stock de los insumos correspondientes.
      */
     @Transactional
     public ConsumoResponseDTO registrarConsumoPorServicio(Long servicioId) {
 
-        // 1. Buscar las reglas de consumo para este servicio
+        // Buscar las reglas de consumo para este servicio
         List<ConsumoInsumo> reglasDeConsumo = consumoInsumoRepository.findByServicioId(servicioId);
 
         if (reglasDeConsumo.isEmpty()) {
@@ -37,7 +36,7 @@ public class ConsumoService {
             return new ConsumoResponseDTO("OK", "El servicio no tiene insumos configurados.", 0);
         }
 
-        // 2. Iterar y descontar stock
+        //Iterar y descontar stock
         for (ConsumoInsumo regla : reglasDeConsumo) {
             Insumo insumo = regla.getInsumo();
             if (insumo == null) {
@@ -48,13 +47,13 @@ public class ConsumoService {
             // (Si el stock fuera decimal, se ajustaría Insumo.stock)
             int cantidadADescontar = regla.getCantidadPorServicio().intValue();
 
-            // 3. Validación de Stock
+            //Validación de Stock
             if (insumo.getStock() < cantidadADescontar) {
                 throw new BusinessRuleException("Stock insuficiente para el insumo: " + insumo.getNombre() +
                         ". Stock actual: " + insumo.getStock() + ", Requerido: " + cantidadADescontar);
             }
 
-            // 4. Descontar y guardar
+            //Descontar y guardar
             insumo.setStock(insumo.getStock() - cantidadADescontar);
             insumoRepository.save(insumo);
         }

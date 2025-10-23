@@ -35,25 +35,24 @@ public class CompraService {
     /**
      * Lógica de Negocio:
      * Al registrar una compra, reponemos el stock del insumo.
-     * CUMPLIMIENTO DEL REQUISITO [fuente: 82]
      */
     @Transactional
     public CompraDTO registrarCompraYReponerStock(CompraDTO compraDTO) {
 
-        // 1. Validar que el proveedor existe
+        //Validar que el proveedor existe
         Proveedor proveedor = proveedorRepository.findById(compraDTO.getProveedorId())
                 .orElseThrow(() -> new EntityNotFoundException("Proveedor no encontrado con ID: " + compraDTO.getProveedorId()));
 
-        // 2. Validar que el insumo existe
+        //Validar que el insumo existe
         Insumo insumo = insumoRepository.findById(compraDTO.getInsumoIdParaReponer())
                 .orElseThrow(() -> new EntityNotFoundException("Insumo no encontrado con ID: " + compraDTO.getInsumoIdParaReponer()));
 
-        // 3. Crear y guardar la entidad Compra
+        //Crear y guardar la entidad Compra
         Compra compra = compraMapper.toEntity(compraDTO);
         compra.setProveedor(proveedor);
         Compra compraGuardada = compraRepository.save(compra);
 
-        // 4. Lógica de Reposición de Stock
+        //lógica de Reposición de Stock
         int stockActual = insumo.getStock();
         insumo.setStock(stockActual + compraDTO.getCantidadRepuesta());
         insumoRepository.save(insumo); // Actualiza el stock del insumo

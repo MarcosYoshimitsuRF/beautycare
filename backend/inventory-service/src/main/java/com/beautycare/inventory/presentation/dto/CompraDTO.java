@@ -9,9 +9,6 @@ import java.time.LocalDate;
 
 @Data
 public class CompraDTO {
-    // Este DTO es simplificado para la creación,
-    // asumiendo que el Frontend envía detalles de otra forma.
-    // Para este CRUD, nos centramos en la lógica de reposición.
 
     private Long id;
 
@@ -28,8 +25,7 @@ public class CompraDTO {
     @Min(value = 0, message = "El total no puede ser negativo")
     private BigDecimal total;
 
-    // --- Detalles para reponer stock ---
-    // En un POST /compras, esperamos el detalle de qué se compró
+
     @NotNull(message = "El ID del insumo a reponer es obligatorio")
     private Long insumoIdParaReponer;
 

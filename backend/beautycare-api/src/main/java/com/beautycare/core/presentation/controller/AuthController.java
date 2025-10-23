@@ -31,7 +31,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UsuarioDTO> register(@Valid @RequestBody RegisterRequest registerRequest) {
         UsuarioDTO usuarioCreado = authService.register(registerRequest);
-        // Devolvemos 201 Created con el DTO del usuario
         return new ResponseEntity<>(usuarioCreado, HttpStatus.CREATED);
     }
 }

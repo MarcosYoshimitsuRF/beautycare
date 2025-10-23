@@ -11,12 +11,6 @@ public class WebClientConfig {
     @Value("${services.inventory.url}")
     private String inventoryServiceUrl;
 
-    /**
-     * Define un bean de WebClient pre-configurado con la URL base
-     * del servicio de inventario.
-     * WebClient es la herramienta moderna (incluida con Webflux)
-     * para realizar llamadas REST.
-     */
     @Bean
     public WebClient inventoryWebClient() {
         return WebClient.builder()

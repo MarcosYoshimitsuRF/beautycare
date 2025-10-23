@@ -75,7 +75,6 @@ public class JwtService {
                 .getPayload();
     }
 
-    // --- Métodos privados de utilidad ---
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);

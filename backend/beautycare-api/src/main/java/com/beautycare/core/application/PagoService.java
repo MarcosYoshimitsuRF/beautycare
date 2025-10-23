@@ -28,21 +28,15 @@ public class PagoService {
     @Transactional
     public PagoResponseDTO registrarPago(PagoRequestDTO requestDTO) {
 
-        // 1. VALIDACIÓN DE DOBLE PAGO [fuente: 71]
+        //VALIDACIÓN DE DOBLE PAGO [fuente: 71]
         if (pagoRepository.existsByCitaId(requestDTO.getCitaId())) {
             throw new BusinessRuleException("Ya existe un pago registrado para la cita ID: " + requestDTO.getCitaId());
         }
 
-        // 2. Buscar Cita
+        //Buscar Cita
         Cita cita = citaRepository.findById(requestDTO.getCitaId())
                 .orElseThrow(() -> new EntityNotFoundException("Cita no encontrada con ID: " + requestDTO.getCitaId()));
 
-        // (Opcional: Validar que el monto del pago coincida con el precio del servicio de la cita)
-        // if (requestDTO.getMonto().compareTo(cita.getServicio().getPrecio()) != 0) {
-        //    throw new BusinessRuleException("El monto del pago no coincide con el precio del servicio.");
-        // }
-
-        // 3. Crear y guardar el Pago
         Pago nuevoPago = new Pago();
         nuevoPago.setCita(cita);
         nuevoPago.setMonto(requestDTO.getMonto());

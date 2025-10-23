@@ -12,10 +12,7 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
 
     boolean existsByCitaId(Long citaId);
 
-    /**
-     * Query para reporte de ingresos [fuente: 73].
-     * Suma los montos y cuenta los pagos en un rango de fechas.
-     */
+
     @Query("SELECT COALESCE(SUM(p.monto), 0) FROM Pago p " +
             "WHERE p.fechaHora BETWEEN :desde AND :hasta")
     BigDecimal sumIngresosBetweenDates(

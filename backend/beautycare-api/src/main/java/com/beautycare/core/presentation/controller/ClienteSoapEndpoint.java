@@ -10,7 +10,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-@Endpoint // Define esta clase como un manejador de SOAP
+@Endpoint
 @RequiredArgsConstructor
 public class ClienteSoapEndpoint {
 
@@ -26,10 +26,10 @@ public class ClienteSoapEndpoint {
     @ResponsePayload // Indica que el retorno es el cuerpo de la respuesta SOAP
     public ConsultarEstadoClienteResponse consultarEstadoCliente(@RequestPayload ConsultarEstadoClienteRequest request) {
 
-        // 1. Lógica de negocio
+        // ógica de negocio
         String estado = clienteService.consultarEstadoClienteSoap(request.getClienteId());
 
-        // 2. Construir la respuesta JAXB
+        //Construir la respuesta JAXB
         ConsultarEstadoClienteResponse response = new ConsultarEstadoClienteResponse();
         response.setEstado(estado);
 

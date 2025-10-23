@@ -38,8 +38,7 @@ public class CitaController {
     }
 
     /**
-     * Endpoint para actualizar estado [fuente: 70, 92]
-     * AHORA INCLUYE EL REENVÍO DEL TOKEN
+     * Endpoint para actualizar estado
      */
     @PutMapping("/{id}/estado")
     public ResponseEntity<CitaResponseDTO> actualizarEstado(
@@ -54,7 +53,7 @@ public class CitaController {
             throw new BusinessRuleException("El 'estado' es obligatorio en el body.");
         }
 
-        // 2. Pasamos el token al servicio
+        // Pasamos el token al servicio
         CitaResponseDTO citaActualizada = citaService.actualizarEstadoCita(id, nuevoEstado.toUpperCase(), authHeader);
         return ResponseEntity.ok(citaActualizada);
     }

@@ -15,11 +15,6 @@ public class ConsumoInsumo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * ID del servicio en la BD 'beautycare_db'.
-     * NO es una FK, es un campo numérico desacoplado.
-     * Esto es fundamental para la arquitectura de microservicios.
-     */
     @Column(name = "servicio_id", nullable = false)
     private Long servicioId;
 

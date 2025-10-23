@@ -16,10 +16,6 @@ public class ConsumoController {
 
     private final ConsumoService consumoService;
 
-    /**
-     * Endpoint de comunicación interna [fuente: 84].
-     * Será llamado por 'beautycare-api' cuando una cita se completa.
-     */
     @PostMapping("/registrar-por-servicio/{servicio_id}")
     public ResponseEntity<ConsumoResponseDTO> registrarConsumo(@PathVariable("servicio_id") Long servicioId) {
 

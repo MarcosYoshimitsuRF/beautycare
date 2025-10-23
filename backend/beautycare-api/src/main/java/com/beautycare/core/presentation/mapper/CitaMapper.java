@@ -29,6 +29,5 @@ public class CitaMapper {
         return dto;
     }
 
-    // No hay toEntity desde CitaRequestDTO porque la creación
-    // requiere buscar las entidades (Cliente, Profesional, etc)
+
 }

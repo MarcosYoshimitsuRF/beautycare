@@ -22,5 +22,4 @@ public class PagoRequestDTO {
     @NotBlank(message = "El método de pago es obligatorio")
     private String metodo; // Ej. "Efectivo", "Tarjeta"
 
-    // La fechaHora se asigna en el servicio.
 }

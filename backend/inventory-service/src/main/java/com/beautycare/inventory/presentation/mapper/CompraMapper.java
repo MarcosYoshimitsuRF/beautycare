@@ -24,7 +24,6 @@ public class CompraMapper {
     }
 
     // Mapeo para POST (Crear Compra)
-    // Nota: El DTO de entrada es diferente a la entidad (tiene lógica de reposición)
     public Compra toEntity(CompraDTO dto) {
         Compra compra = new Compra();
         compra.setFecha(dto.getFecha());

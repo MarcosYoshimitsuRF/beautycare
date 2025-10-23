@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes") // Protegido por SecurityConfig (ADMIN)
+@RequestMapping("/clientes")
 @RequiredArgsConstructor
 public class ClienteController {
 
@@ -41,6 +41,6 @@ public class ClienteController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {
         clienteService.eliminarCliente(id);
-        return ResponseEntity.noContent().build(); // 204 No Content
+        return ResponseEntity.noContent().build();
     }
 }

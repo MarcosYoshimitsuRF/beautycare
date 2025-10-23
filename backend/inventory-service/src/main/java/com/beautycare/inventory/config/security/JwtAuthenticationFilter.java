@@ -43,16 +43,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(7);
 
-        // 1. Validamos la firma del token (sin consultar la BD)
+        //Validamos la firma del token (sin consultar la BD)
         if (!jwtService.isTokenSignatureValid(jwt)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 2. Extraemos el username (Subject)
+        //Extraemos el username (Subject)
         username = jwtService.extractUsername(jwt);
 
-        // 3. Si tenemos username y no está autenticado
+        //Si tenemos username y no está autenticado
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             // 4. Extraemos los roles DIRECTAMENTE del 'claim' del token
@@ -63,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
 
-            // 5. Creamos el token de autenticación (basado en la confianza del JWT)
+            //Creamos el token de autenticación (basado en la confianza del JWT)
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     username, // Usamos el username (String) como 'Principal'
                     null,

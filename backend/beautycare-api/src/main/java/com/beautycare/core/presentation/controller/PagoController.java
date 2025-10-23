@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pagos") // Protegido por SecurityConfig (Autenticado)
+@RequestMapping("/pagos")
 @RequiredArgsConstructor
 public class PagoController {
 
@@ -26,7 +26,6 @@ public class PagoController {
 
     @GetMapping
     public ResponseEntity<List<PagoResponseDTO>> listarPagos() {
-        // (Filtros GET no especificados, se listan todos) [fuente: 71]
         return ResponseEntity.ok(pagoService.listarPagos());
     }
 }

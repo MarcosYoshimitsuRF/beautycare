@@ -28,8 +28,8 @@ public class DataSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         log.info("Ejecutando DataSeeder...");
 
-        // --- Crear/Verificar Roles ---
-        // Aunque V2 los inserta, verificamos aquí por robustez
+        // Crear/Verificar Roles ---
+        // Aunque V2 los inserta
         Rol rolAdmin = findOrCreateRol("ADMIN");
         Rol rolCliente = findOrCreateRol("CLIENTE");
         Rol rolStaff = findOrCreateRol("STAFF");
@@ -47,7 +47,7 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private Rol findOrCreateRol(String nombreRol) {
-        Optional<Rol> rolOpt = rolRepository.findByNombre(nombreRol); // Necesitamos añadir findByNombre a RolRepository
+        Optional<Rol> rolOpt = rolRepository.findByNombre(nombreRol);
         if (rolOpt.isPresent()) {
             return rolOpt.get();
         } else {
@@ -70,14 +70,8 @@ public class DataSeeder implements CommandLineRunner {
             log.info("Creando usuario: {}", username);
             usuarioRepository.save(newUser);
         } else {
-            // Opcional: Podrías verificar si la contraseña o roles necesitan actualizarse
             log.info("Usuario {} ya existe.", username);
-            // Usuario existingUser = userOpt.get();
-            // if (!passwordEncoder.matches(rawPassword, existingUser.getPassword())) {
-            //     existingUser.setPassword(passwordEncoder.encode(rawPassword));
-            //     usuarioRepository.save(existingUser);
-            //     log.info("Contraseña actualizada para {}", username);
-            // }
+
         }
     }
 }
